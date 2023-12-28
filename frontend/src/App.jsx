@@ -3,9 +3,11 @@ import AllLayout from "./layouts/AllLayout";
 import BlogPage from "./pages/BlogPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import UserContextProvider from "./context/UserContext";
 
 function App() {
   return (
+    <UserContextProvider>
     <Routes>
       <Route path='/' element={<AllLayout />}>
         <Route index element={<BlogPage/>} />
@@ -13,6 +15,7 @@ function App() {
         <Route path={"/register"} element={<RegisterPage />} />
       </Route>
     </Routes>
+    </UserContextProvider>
   );
 }
 

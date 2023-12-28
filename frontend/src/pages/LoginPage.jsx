@@ -1,26 +1,41 @@
-import { useState } from 'react';
-const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const handleLogin =async (e) => {
-    e.preventDefault()
-    try {
-      const res=await fetch('http://localhost:4000/login', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-      headers: { 'Content-Type': 'application/json' }
-      })
-      if(!res.ok) throw res
-      else alert('Logged in Successfully')
-    }
-    catch(err){
-      console.log(err)
-    }
+import { useContext, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
+const LoginPage = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [redirect, setRedirect] = useState(false); // this is to redirect the user to the home page after login
+  const {setUserInfo}=useContext(UserContext);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const res=await fetch("http://localhost:4000/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // this is to allow cookies to be sent with the request
+    });
+    if (res.ok)
+    {
+      res.json().then(userInfo => {
+        setUserInfo(userInfo);
+        setRedirect(true);
+      })
+    }
+    else alert("Invalid Credentials")
+  };
+  if(redirect)
+  {
+    return <Navigate to="/"/>
   }
   return (
-      <form action='' className="flex flex-col w-3/4 mx-auto" onSubmit={handleLogin}>
-          <h1 className="mb-5">👋Login</h1>
+    <form
+      action=''
+      className='flex flex-col w-3/4 mx-auto'
+      onSubmit={handleLogin}>
+      <h1 className='mb-5'>👋Login</h1>
       <input
         type='text'
         name='username'
