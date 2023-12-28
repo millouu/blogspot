@@ -28,6 +28,7 @@
         @apply mt-4;
     }
     input, select, textarea {
-        @apply m-1 rounded bg-black p-1;
+        @apply my-2 rounded-sm p-3 border border-gray-600;  
     }
+   
 }
