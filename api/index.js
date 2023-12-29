@@ -27,6 +27,7 @@ app.post("/register", async (req, res) => {
       username,
       password: bcrypt.hashSync(password, salt),
     });
+    res.send("ok")
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -73,20 +74,36 @@ app.post("/logout", (req, res) => {
 
 //endpoint for creating new post
 const upload = multer({ dest: "uploads/" });
-app.post("/createpost", upload.single("file"),async (req, res) => {
+app.post("/createpost", upload.single("file"), async (req, res) => {
   const { originalname, path } = req.file;
   const partsOfFilename = originalname.split(".");
   const extension = partsOfFilename[partsOfFilename.length - 1];
-  const newPath=path + "." + extension
+  const newPath = path + "." + extension;
   fs.renameSync(path, newPath);
 
-  const postDoc=await PostModel.create({
-    title: req.body.title,
-    description: req.body.description,
-    content: req.body.content,
-    coverImage: newPath,
+  //for getting the author name
+  const { token } = req.cookies;
+  jwt.verify(token, jwtsecret, {}, async (err, payload) => {
+    if (err) {
+      throw err;
+    }
+    const postDoc = await PostModel.create({
+      title: req.body.title,
+      description: req.body.description,
+      summary: req.body.summary,
+      content: req.body.content,
+      coverImage: newPath,
+      author: payload.id,
+    });
   });
-  res.json(postDoc);
+});
+
+//endpoint for getting all posts
+app.get("/getallposts", async (req, res) => {
+  const posts = await PostModel.find()
+    .populate("author", { username: 1 })
+    .sort({ createdAt: -1 });
+  res.json(posts);
 });
 
 app.listen(4000, () => console.log("Server on port 4000"));

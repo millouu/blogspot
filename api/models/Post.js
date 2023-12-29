@@ -8,7 +8,8 @@ const PostSchema = new Schema({
     title: String,
     summary: String,
     content: String,
-    coverImage:String
+    coverImage: String,
+    author:{type: Schema.Types.ObjectId, ref: "Users"},
 }, {
     timestamps: true
 })
