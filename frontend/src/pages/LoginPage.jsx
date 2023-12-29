@@ -33,7 +33,7 @@ const LoginPage = () => {
   return (
     <form
       action=''
-      className='flex flex-col w-3/4 mx-auto'
+      className='flex flex-col w-3/4 mx-auto gap-5'
       onSubmit={handleLogin}>
       <h1 className='mb-5'>👋Login</h1>
       <input

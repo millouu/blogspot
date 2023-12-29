@@ -22,7 +22,7 @@ const RegisterPage = () => {
   return (
     <form
       action=''
-      className='flex flex-col w-3/4 mx-auto'
+      className='flex flex-col w-3/4 mx-auto gap-5'
       onSubmit={handleRegister}>
       <h1 className='mb-5'>🐧Register</h1>
 
@@ -43,9 +43,7 @@ const RegisterPage = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button
-        type='submit'
-        className='rounded-sm p-3 bg-slate-950 text-white ;'>
+      <button type='submit' className='rounded-sm p-3 bg-slate-950 text-white'>
         Register
       </button>
     </form>

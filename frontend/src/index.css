@@ -28,7 +28,7 @@
         @apply mt-4;
     }
     input, select, textarea {
-        @apply my-2 rounded-sm p-3 border border-gray-600;  
+        @apply rounded-sm p-3 border border-gray-600;  
     }
    
 }

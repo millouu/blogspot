@@ -3,10 +3,13 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import User from "./models/User.js";
+import PostModel from "./models/Post.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import multer from "multer";
+import fs from "fs";
 dotenv.config();
 
 const app = express();
@@ -66,6 +69,24 @@ app.get("/profile", (req, res) => {
 //endpoint for logout
 app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
+});
+
+//endpoint for creating new post
+const upload = multer({ dest: "uploads/" });
+app.post("/createpost", upload.single("file"),async (req, res) => {
+  const { originalname, path } = req.file;
+  const partsOfFilename = originalname.split(".");
+  const extension = partsOfFilename[partsOfFilename.length - 1];
+  const newPath=path + "." + extension
+  fs.renameSync(path, newPath);
+
+  const postDoc=await PostModel.create({
+    title: req.body.title,
+    description: req.body.description,
+    content: req.body.content,
+    coverImage: newPath,
+  });
+  res.json(postDoc);
 });
 
 app.listen(4000, () => console.log("Server on port 4000"));
