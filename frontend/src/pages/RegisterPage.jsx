@@ -24,7 +24,7 @@ const RegisterPage = () => {
   };
 
   if (redirect) {
-    return <Navigate to='/' />;
+    return <Navigate to='/login' />;
   }
 
   return (

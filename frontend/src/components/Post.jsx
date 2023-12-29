@@ -1,26 +1,28 @@
 import PropTypes from "prop-types";
 import { format } from "date-fns";
-const Post = ({ title, summary, coverImage, createdAt , author}) => {
+const Post = ({ title, summary, coverImage, createdAt, author }) => {
   return (
-    <div className='relative mb-7 flex bg-clip-border rounded-xl bg-white text-gray-700 hover:shadow-md w-full max-w-[48rem] flex-row cursor-pointer'>
+    <div className='relative mb-7 h-64 flex bg-clip-border rounded-xl bg-white text-gray-700 hover:shadow-md w-full max-w-[48rem] flex-row cursor-pointer'>
       <div className='relative w-2/5 m-0 overflow-hidden text-gray-700 bg-white rounded-r-none bg-clip-border rounded-xl shrink-0'>
         <img
-          src={coverImage}
+          src={`http://localhost:4000/${coverImage}`}
           alt='card-image'
           className='object-cover w-full h-full'
         />
       </div>
-      <div className='p-6'>
-        <h4 className='block mb-2 font-sans text-2xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900'>
-          {title}
-        </h4>
-        <div className='mb-3 font-sans text-md font-medium uppercase flex gap-3 antialiased leading-snug tracking-normal text-blue-gray-900'>
-          <span>{author.username}</span>
-          <time>{format(new Date(createdAt), "MMM d,yyyy HH:mm")}</time>
+      <div className='p-6 pt-3 flex flex-col justify-between'>
+        <div>
+          <h4 className='block mb-2 font-sans text-2xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900'>
+            {title}
+          </h4>
+          <div className='mb-3 font-sans text-md font-medium uppercase flex gap-3 antialiased leading-snug tracking-normal text-blue-gray-900'>
+            <span>{author.username}</span>
+            <time>{format(new Date(createdAt), "MMM d,yyyy HH:mm")}</time>
+          </div>
+          <p className='block mb-8 font-sans text-base antialiased font-normal leading-relaxed text-gray-700'>
+            {summary}
+          </p>
         </div>
-        <p className='block mb-8 font-sans text-base antialiased font-normal leading-relaxed text-gray-700'>
-          {summary}
-        </p>
         <div className='inline-block'>
           <button
             className='flex items-center gap-2 font-sans text-sm font-bold text-center text-gray-900 uppercase align-middle'

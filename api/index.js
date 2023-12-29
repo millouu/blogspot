@@ -16,6 +16,8 @@ const app = express();
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use(cookieParser());
+//for using the images in the uploads folder
+app.use("/uploads", express.static("uploads"));
 
 var salt = bcrypt.genSaltSync(10);
 const jwtsecret = process.env.JWT_SECRET;
@@ -27,7 +29,7 @@ app.post("/register", async (req, res) => {
       username,
       password: bcrypt.hashSync(password, salt),
     });
-    res.send("ok")
+    res.send("ok");
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -102,7 +104,8 @@ app.post("/createpost", upload.single("file"), async (req, res) => {
 app.get("/getallposts", async (req, res) => {
   const posts = await PostModel.find()
     .populate("author", { username: 1 })
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .limit(10);
   res.json(posts);
 });
 
