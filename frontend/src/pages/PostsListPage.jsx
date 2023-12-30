@@ -2,7 +2,7 @@ import { useEffect,useState } from "react"
 import Post from "../components/Post"
 
 
-const BlogPage = () => {
+const PostsListPage = () => {
   const [posts,setPosts]=useState([])
   useEffect(() => { 
     fetch('http://localhost:4000/getallposts').then(
@@ -24,4 +24,4 @@ const BlogPage = () => {
   )
 }
 
-export default BlogPage
+export default PostsListPage

@@ -109,4 +109,11 @@ app.get("/getallposts", async (req, res) => {
   res.json(posts);
 });
 
+//endpoint for getting a single post using id
+app.get("/getpost/:id", async (req, res) => {
+  const { id } = req.params;
+  const postDoc = await PostModel.findById(id).populate("author",{username:1})
+  res.json(postDoc);
+})
+
 app.listen(4000, () => console.log("Server on port 4000"));

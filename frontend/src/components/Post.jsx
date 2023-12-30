@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
-const Post = ({ title, summary, coverImage, createdAt, author }) => {
+const Post = ({ title, summary, coverImage, createdAt, author,_id }) => {
   return (
-    <div className='relative mb-7 h-64 flex bg-clip-border rounded-xl bg-white text-gray-700 hover:shadow-md w-full max-w-[48rem] flex-row cursor-pointer'>
+    <Link to={`/post/${_id}`}>
+      <div className='relative mb-7 h-64 flex bg-clip-border rounded-xl bg-white text-gray-700 hover:shadow-md w-full max-w-[48rem] flex-row cursor-pointer'>
       <div className='relative w-2/5 m-0 overflow-hidden text-gray-700 bg-white rounded-r-none bg-clip-border rounded-xl shrink-0'>
         <img
           src={`http://localhost:4000/${coverImage}`}
@@ -44,6 +46,7 @@ const Post = ({ title, summary, coverImage, createdAt, author }) => {
         </div>
       </div>
     </div>
+    </Link>
   );
 };
 
@@ -54,6 +57,7 @@ Post.propTypes = {
   coverImage: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
   author: PropTypes.object.isRequired,
+  _id: PropTypes.string.isRequired
 };
 
 export default Post;
