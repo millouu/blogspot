@@ -91,12 +91,52 @@ app.post("/createpost", upload.single("file"), async (req, res) => {
     }
     const postDoc = await PostModel.create({
       title: req.body.title,
-      description: req.body.description,
       summary: req.body.summary,
       content: req.body.content,
       coverImage: newPath,
       author: payload.id,
     });
+  });
+});
+
+app.put("/editpost/:id", upload.single("file"), async (req, res) => {
+  const id = req.params.id;
+  let newPath = "";
+
+  if (req.file) {
+    // A file was uploaded
+    const { originalname, path } = req.file;
+    const partsOfFilename = originalname.split(".");
+    const extension = partsOfFilename[partsOfFilename.length - 1];
+    newPath = path + "." + extension;
+    fs.renameSync(path, newPath);
+  }
+
+  const { token } = req.cookies;
+  jwt.verify(token, jwtsecret, {}, async (err, payload) => {
+    if (err) {
+      throw err;
+    }
+    const postDoc = await PostModel.findById(id);
+    //check if the author of the post is the same as the user who is logged in
+    const isAuthor =
+      JSON.stringify(postDoc.author) === JSON.stringify(payload.id);
+    if (!isAuthor) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const updateObject = {
+      title: req.body.title,
+      summary: req.body.summary,
+      content: req.body.content,
+    };
+    if (newPath !== "") {
+      updateObject.coverImage = newPath;
+    }
+    const post = await PostModel.findByIdAndUpdate(id, updateObject, {
+      new: true,
+    });
+    
+    res.send("updated");
   });
 });
 
@@ -112,8 +152,10 @@ app.get("/getallposts", async (req, res) => {
 //endpoint for getting a single post using id
 app.get("/getpost/:id", async (req, res) => {
   const { id } = req.params;
-  const postDoc = await PostModel.findById(id).populate("author",{username:1})
+  const postDoc = await PostModel.findById(id).populate("author", {
+    username: 1,
+  });
   res.json(postDoc);
-})
+});
 
 app.listen(4000, () => console.log("Server on port 4000"));
